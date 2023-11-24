@@ -94,7 +94,7 @@
         function ageRange() {
             const min_age = document.getElementById('min_age').value;
         
-            fetch(`http://127.0.0.1:8000/age_range/${min_age}`)
+            fetch(`https://fastapi-most-wanted-dev-jebm.3.us-1.fl0.io/age_range/${min_age}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
@@ -118,7 +118,7 @@
 
         function getScars() {
         
-            fetch(`http://127.0.0.1:8000/scars`)
+            fetch(`https://fastapi-most-wanted-dev-jebm.3.us-1.fl0.io/scars`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
@@ -144,7 +144,7 @@
         function getNationality() {
             const nationality = document.getElementById('nationality').value;
         
-            fetch(`http://127.0.0.1:8000/nationality/${nationality}`)
+            fetch(`https://fastapi-most-wanted-dev-jebm.3.us-1.fl0.io/nationality/${nationality}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
@@ -168,7 +168,7 @@
         }
 
         function getNoNationality() {
-            fetch('http://127.0.0.1:8000/no_nationality_known')
+            fetch('https://fastapi-most-wanted-dev-jebm.3.us-1.fl0.io/no_nationality_known')
                 .then(response => response.json())
                 .then(data => {
                     alert(JSON.stringify(data) + " %");
@@ -180,7 +180,7 @@
         }
 
         function getYesNationality() {
-            fetch('http://127.0.0.1:8000/nationality_known')
+            fetch('https://fastapi-most-wanted-dev-jebm.3.us-1.fl0.io/nationality_known')
                 .then(response => response.json())
                 .then(data => {
                     alert(JSON.stringify(data));
@@ -202,7 +202,7 @@
         }
 
         function getMales() {
-            fetch('http://127.0.0.1:8000/males')
+            fetch('https://fastapi-most-wanted-dev-jebm.3.us-1.fl0.io/males')
                 .then(response => response.json())
                 .then(data => {
                     alert(JSON.stringify(data));
@@ -223,7 +223,7 @@
         }
 
         function getFemales() {
-            fetch('http://127.0.0.1:8000/females')
+            fetch('https://fastapi-most-wanted-dev-jebm.3.us-1.fl0.io/females')
                 .then(response => response.json())
                 .then(data => {
                     alert(JSON.stringify(data));
