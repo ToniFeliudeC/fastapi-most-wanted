@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad FastAPI</title>
+    <style>
+        #tabla {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+          }
+          
+          #tabla td, #tabla th {
+            border: 1px solid #ddd;
+            padding: 8px;
+          }
+          
+          #tabla tr:nth-child(even){background-color: #f2f2f2;}
+          
+          #tabla tr:hover {background-color: #ddd;}
+          
+          #tabla th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+          }
+    </style>
+</head>
+<body>
+    <h1>Actividad FastAPI</h1>
+
+    <form id="getInfoForm">
+        <button type="button" onclick="getNoNationality()">Mostrar % de sujetos buscados cuya nacionalidad es desconocida</button>
+    </form>
+    <br>
+    <form id="getInfoForm2">
+        <button type="button" onclick="getYesNationality()">Mostrar sujetos cuya nacionalidad es conocida</button>
+    </form>
+    <br>
+    <form id="getInfoForm3">
+        <button type="button" onclick="getMales()">Mostrar sujetos hombres</button>
+    </form>
+    <br>
+    <form id="getInfoForm4">
+        <button type="button" onclick="getFemales()">Mostrar sujetos mujeres</button>
+    </form>
+    <br>
+    <form id="getInfoForm5">
+        <button type="button" onclick="getScars()">Mostrar todos los sujetos que tengan marcas y/o cicatrices</button>
+    </form>
+    <br>
+    <form id="getInfoForm6">
+        <label for="nacionalidad">Selecciona una Nacionalidad:</label>
+        <select id="nationality" name="nationality">
+            <option value="Jamaican">Jamaican</option>
+            <option value="Haitian">Haitian</option>
+            <option value="American">American</option>
+            <option value="Filipino">Filipino</option>
+            <option value="United States">United States</option>
+            <option value="Syrian">Syrian</option>
+            <option value="Chinese">Chinese</option>
+        </select>
+        <button type="button" onclick="getNationality()">Filtrar por nacionalidad</button>
+    </form>
+    <br>
+    <form id="sendDataForm">
+        <label for="min_age">Edad minima</label>
+        <input type="number" id="min_age" name="min_age" required>
+
+        <button type="button" onclick="ageRange()">Realizar query</button>
+    </form>
+    <h2>Tabla de Buscados</h2>
+
+    <table id="tabla">
+        <thead>
+            <tr>
+                <th>Sexo</th>
+                <th>Nacionalidad</th>
+                <th>Marcas y cicatrices</th>
+                <th>Edad Minima</th>
+                <th>Edad Maxima</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            
+        </tbody>
+    </table>
+
+    <script>
+
+        function ageRange() {
+            const min_age = document.getElementById('min_age').value;
+        
+            fetch(`http://127.0.0.1:8000/age_range/${min_age}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    alert(JSON.stringify(data));
+                    // Obtener la referencia del cuerpo de la tabla
+                    var tbody = document.getElementById('tbody');
+
+                    // Limpiar el cuerpo de la tabla antes de agregar nuevas filas
+                    tbody.innerHTML = "";
+        
+                    // Iterar sobre los datos y agregar filas a la tabla
+                    data.forEach(buscado => {
+                        agregarFilaTabla(buscado);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                
+        }
+
+        function getScars() {
+        
+            fetch(`http://127.0.0.1:8000/scars`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    alert(JSON.stringify(data));
+                    // Obtener la referencia del cuerpo de la tabla
+                    var tbody = document.getElementById('tbody');
+
+                    // Limpiar el cuerpo de la tabla antes de agregar nuevas filas
+                    tbody.innerHTML = "";
+        
+                    // Iterar sobre los datos y agregar filas a la tabla
+                    data.forEach(buscado => {
+                        agregarFilaTabla(buscado);
+                    });
+                    mode: 'no-cors' 
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                
+        }
+
+        function getNationality() {
+            const nationality = document.getElementById('nationality').value;
+        
+            fetch(`http://127.0.0.1:8000/nationality/${nationality}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    alert(JSON.stringify(data));
+                    // Obtener la referencia del cuerpo de la tabla
+                    var tbody = document.getElementById('tbody');
+
+                    // Limpiar el cuerpo de la tabla antes de agregar nuevas filas
+                    tbody.innerHTML = "";
+        
+                    // Iterar sobre los datos y agregar filas a la tabla
+                    data.forEach(buscado => {
+                        agregarFilaTabla(buscado);
+                    });
+                    mode: 'no-cors' 
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                
+        }
+
+        function getNoNationality() {
+            fetch('http://127.0.0.1:8000/no_nationality_known')
+                .then(response => response.json())
+                .then(data => {
+                    alert(JSON.stringify(data) + " %");
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+        }
+
+        function getYesNationality() {
+            fetch('http://127.0.0.1:8000/nationality_known')
+                .then(response => response.json())
+                .then(data => {
+                    alert(JSON.stringify(data));
+                    // Obtener la referencia del cuerpo de la tabla
+                    var tbody = document.getElementById('tbody');
+
+                    // Limpiar el cuerpo de la tabla antes de agregar nuevas filas
+                    tbody.innerHTML = "";
+        
+                    // Iterar sobre los datos y agregar filas a la tabla
+                    data.forEach(buscado => {
+                        agregarFilaTabla(buscado);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+        }
+
+        function getMales() {
+            fetch('http://127.0.0.1:8000/males')
+                .then(response => response.json())
+                .then(data => {
+                    alert(JSON.stringify(data));
+                    // Obtener la referencia del cuerpo de la tabla
+                    var tbody = document.getElementById('tbody');
+
+                    // Limpiar el cuerpo de la tabla antes de agregar nuevas filas
+                    tbody.innerHTML = "";
+        
+                    // Iterar sobre los datos y agregar filas a la tabla
+                    data.forEach(buscado => {
+                        agregarFilaTabla(buscado);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function getFemales() {
+            fetch('http://127.0.0.1:8000/females')
+                .then(response => response.json())
+                .then(data => {
+                    alert(JSON.stringify(data));
+                    // Obtener la referencia del cuerpo de la tabla
+                    var tbody = document.getElementById('tbody');
+
+                    // Limpiar el cuerpo de la tabla antes de agregar nuevas filas
+                    tbody.innerHTML = "";
+        
+                    // Iterar sobre los datos y agregar filas a la tabla
+                    data.forEach(buscado => {
+                        agregarFilaTabla(buscado);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+        }
+
+        function agregarFilaTabla(buscado) {
+            console.log("entra")
+            // Obtener la referencia del cuerpo de la tabla
+            var tbody = document.getElementById('tbody');
+        
+            // Crear una nueva fila
+            var fila = tbody.insertRow();
+        
+            // Crear celdas y agregar datos
+            var celdaSexo = fila.insertCell(0);
+            var celdaNacionalidad = fila.insertCell(1);
+            var celdaMarcas = fila.insertCell(2);
+            var celdaEdadMinima = fila.insertCell(3);
+            var celdaEdadMaxima = fila.insertCell(4);
+        
+            celdaSexo.innerHTML = buscado.sex !== null ? buscado.sex : "N/A";
+            celdaNacionalidad.innerHTML = buscado.nationality !== null ? buscado.nationality : "N/A";
+            celdaMarcas.innerHTML = buscado.scars_and_marks !== null ? buscado.scars_and_marks : "N/A";
+            celdaEdadMinima.innerHTML = buscado.age_min !== null ? buscado.age_min : "N/A";
+            celdaEdadMaxima.innerHTML = buscado.age_max !== null ? buscado.age_max : "N/A";
+        }
+
+    </script>
+</body>
+</html>
